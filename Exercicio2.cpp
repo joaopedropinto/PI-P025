@@ -26,7 +26,52 @@ public:
 };
 
 //INICIO DA PARTE DE GABRIEL
+// Classe que define um usuario
+class Usuario {
+private:
+    string nome_usuario;         // Nome de usuario (identificador único)
+    string nome;                 // Nome real do usuario
+    vector<Usuario*> seguidores; // Lista de quem segue este usuario
+    vector<Usuario*> seguindo;   // Lista de quem este usuario segue
+    vector<Tweet*> tweets;       // Tweets que o usuario postou
 
+public:
+    // Construtor de Usuario
+    Usuario(const string& nome_usuario, const string& nome)
+        : nome_usuario(nome_usuario), nome(nome) {}
+
+    // Função para o usuario postar um tweet
+    void postar_tweet(const string& conteudo) {
+        tweets.push_back(new Tweet(this, conteudo));
+    }
+
+    // Função para o usuario seguir outro usuario
+    void seguir(Usuario* usuario) {
+        if (usuario != this && find(seguindo.begin(), seguindo.end(), usuario) == seguindo.end()) {
+            seguindo.push_back(usuario);
+            usuario->seguidores.push_back(this);
+        }
+    }
+
+    // Função para recuperar feed de tweets das pessoas que o usuario segue
+    vector<Tweet*> receber_feed() {
+        vector<Tweet*> feed;
+        for (auto& u : seguindo) {
+            for (auto& t : u->tweets) {
+                feed.push_back(t);
+            }
+        }
+        // Ordenar o feed para mostrar os tweets mais recentes primeiro
+        sort(feed.begin(), feed.end(), [](Tweet* a, Tweet* b) {
+            return a->get_data_criacao() > b->get_data_criacao();
+        });
+        return feed;
+    }
+
+    // Getters
+    string get_nome() const { return nome; }
+    string get_nome_usuario() const { return nome_usuario; }
+};
 //FIM DA PARTE DE GABRIEL
 
 //INICIO DA PARTE DE GREGUE
