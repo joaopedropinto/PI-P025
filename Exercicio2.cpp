@@ -25,7 +25,6 @@ public:
     time_t get_data_criacao() const { return data_criacao; }
 };
 
-//INICIO DA PARTE DE GABRIEL
 // Classe que define um usuario
 class Usuario {
 private:
@@ -72,11 +71,26 @@ public:
     string get_nome() const { return nome; }
     string get_nome_usuario() const { return nome_usuario; }
 };
-//FIM DA PARTE DE GABRIEL
 
-//INICIO DA PARTE DE GREGUE
+// Classe que define a Rede Social
+class RedeSocial {
+private:
+    vector<Usuario*> usuarios; // Lista de todos os usuarios registrados
+    vector<Tweet*> tweets;     // Lista de todos os tweets na rede social
 
-// FIM DA PARTE DE GREGUE
+public:
+    // Destrutor
+    ~RedeSocial() {
+        for (auto& u : usuarios) delete u;
+        for (auto& t : tweets) delete t;
+    }
+
+    // Função para registrar um novo usuario
+    Usuario* registrar_usuario(const string& nome_usuario, const string& nome) {
+        Usuario* user = new Usuario(nome_usuario, nome);
+        usuarios.push_back(user);
+        return user;
+    }
 
     // Função para buscar um usuario pelo nome de usuario
     Usuario* buscar_usuario(const string& nome_usuario) const {
